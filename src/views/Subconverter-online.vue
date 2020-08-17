@@ -227,14 +227,14 @@
 </template>
 
 <script>
-const project = "https://github.com/ACL4SSR/ACL4SSR";
+const project = "https://github.com/zhongfly/sub-web";
 const remoteConfigSample =
   "https://raw.githubusercontent.com/tindy2013/subconverter/master/base/config/example_external_config.ini";
 const gayhubRelease = "https://github.com/tindy2013/subconverter/releases";
-const defaultBackend = "https://api.wcc.best/sub?";
+const defaultBackend = "https://sub-beta.now.sh/sub?";
 const shortUrlBackend = "https://api.suo.yt/short";
 const configUploadBackend = "https://api.wcc.best/config/upload";
-const tgBotLink = "https://t.me/ACL4SSR";
+const tgBotLink = "https://t.me/subconverter";
 
 export default {
   data() {
@@ -265,28 +265,32 @@ export default {
         },
         customBackend: {
           "localhost:25500 本地版": "http://localhost:25500/sub?",
-          "subcon.py6.pw(subconverter作者提供1)":
-            "https://subcon.py6.pw/sub?",
+          "sub-beta.now.sh (自动编译最新版本后端-测试）": "https://sub-beta.now.sh/sub?",
+          "subcon.dlj.tf(subconverter作者提供1)":
+            "https://subcon.dlj.tf/sub?",
           "subconverter-web.now.sh(subconverter作者提供2-稳定)":
             "https://subconverter-web.now.sh/sub?",
           "subconverter.herokuapp.com(subconverter作者提供3-稳定)":
             "https://subconverter.herokuapp.com/sub?",
           "api.dler.io(sub作者&lhie1提供-稳定)": "https://api.dler.io/sub?",
-          "api.wcc.best(sub-web作者提供-稳定)": "https://api.wcc.best/sub?"
+          "api.wcc.best(sub-web作者提供-稳定)": "https://api.wcc.best/sub?",
+          "skapi.cool(世葵官方提供)": "https://skapi.cool/sub?",
         },
         backendOptions: [
           { value: "http://localhost:25500/sub?" },
-          { value: "https://subcon.py6.pw/sub?" },
+          { value: "https://sub-beta.now.sh/sub?" },
+          { value: "https://subcon.dlj.tf/sub?" },
           { value: "https://subconverter-web.now.sh/sub?" },
           { value: "https://subconverter.herokuapp.com/sub?" },
-          { value: "https://api.wcc.best/sub?" }
+          { value: "https://api.wcc.best/sub?" },
+          { value: "https://skapi.cool/sub?" },
         ],
         remoteConfig: [
           {
             label: "默认",
             options: [
               {
-                label: "不选，由接口提供方提供",
+                label: "不选,由接口提供方提供",
                 value: ""
               }
             ]
@@ -572,15 +576,14 @@ export default {
     return data;
   },
   created() {
-    // document.title = "ACL4SSR Subscription Converter";
-    document.title = "ACL4SSR 在线订阅转换";
+    // document.title = "Subscription Converter";
+    document.title = "在线订阅转换";
      this.isPC = this.$getOS().isPc;
   },
   mounted() {
     this.form.clientType = "clash&new_name=true";
-    this.form.customBackend = "https://subcon.py6.pw/sub?";
+    this.form.customBackend = "https://sub-beta.now.sh/sub?";
     this.form.remoteConfig = "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_Online.ini";
-    this.notify();
     this.getBackendVersion();
   },
   methods: {
@@ -746,19 +749,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    },
-    notify() {
-      const h = this.$createElement;
-
-      this.$notify({
-        title: "隐私提示",
-        type: "warning",
-        message: h(
-          "i",
-          { style: "color: teal" },
-          "各种订阅链接（短链接服务除外）生成纯前端实现，无隐私问题。默认提供后端转换服务，隐私担忧者请自行搭建后端服务。"
-        )
-      });
     },
     confirmUploadConfig() {
       if (this.uploadConfig === "") {

@@ -265,8 +265,9 @@ export default {
         },
         customBackend: {
           "localhost:25500 本地版": "http://localhost:25500/sub?",
-          "subcon.py6.pw(subconverter作者提供1)":
-            "https://subcon.py6.pw/sub?",
+          "sub-beta.now.sh (自动编译最新版本后端-测试）": "https://sub-beta.now.sh/sub?",
+          "subcon.dlj.tf(subconverter作者提供1)":
+            "https://subcon.dlj.tf/sub?",
           "subconverter-web.now.sh(subconverter作者提供2-稳定)":
             "https://subconverter-web.now.sh/sub?",
           "subconverter.herokuapp.com(subconverter作者提供3-稳定)":
@@ -276,7 +277,8 @@ export default {
         },
         backendOptions: [
           { value: "http://localhost:25500/sub?" },
-          { value: "https://subcon.py6.pw/sub?" },
+          { value: "https://sub-beta.now.sh/sub?" },
+          { value: "https://subcon.dlj.tf/sub?" },
           { value: "https://subconverter-web.now.sh/sub?" },
           { value: "https://subconverter.herokuapp.com/sub?" },
           { value: "https://api.wcc.best/sub?" }
@@ -572,15 +574,14 @@ export default {
     return data;
   },
   created() {
-    // document.title = "ACL4SSR Subscription Converter";
-    document.title = "ACL4SSR 在线订阅转换";
+    // document.title = "Subscription Converter";
+    document.title = "在线订阅转换";
      this.isPC = this.$getOS().isPc;
   },
   mounted() {
     this.form.clientType = "clash&new_name=true";
-    this.form.customBackend = "http://localhost:25500/sub?";
+    this.form.customBackend = "https://sub-beta.now.sh/sub?";
     this.form.remoteConfig = "config/ACL4SSR.ini";
-    this.notify();
     this.getBackendVersion();
   },
   methods: {
@@ -746,19 +747,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    },
-    notify() {
-      const h = this.$createElement;
-
-      this.$notify({
-        title: "隐私提示",
-        type: "warning",
-        message: h(
-          "i",
-          { style: "color: teal" },
-          "各种订阅链接（短链接服务除外）生成纯前端实现，无隐私问题。默认提供后端转换服务，隐私担忧者请自行搭建后端服务。"
-        )
-      });
     },
     confirmUploadConfig() {
       if (this.uploadConfig === "") {
