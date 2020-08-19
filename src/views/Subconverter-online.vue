@@ -22,6 +22,7 @@
                   type="textarea"
                   rows="3"
                   placeholder="支持订阅或ss/ssr/vmess单链接。多个链接请每行一个或用 | 分隔"
+                  @blur="saveSubUrl"
                 />
               </el-form-item>
               <el-form-item label="客户端:">
@@ -227,14 +228,13 @@
 </template>
 
 <script>
-const project = "https://github.com/zhongfly/sub-web";
-const remoteConfigSample =
-  "https://raw.githubusercontent.com/tindy2013/subconverter/master/base/config/example_external_config.ini";
-const gayhubRelease = "https://github.com/tindy2013/subconverter/releases";
-const defaultBackend = "https://sub-beta.now.sh/sub?";
-const shortUrlBackend = "https://api.suo.yt/short";
-const configUploadBackend = "https://api.wcc.best/config/upload";
-const tgBotLink = "https://t.me/subconverter";
+const project = process.env.VUE_APP_PROJECT
+const remoteConfigSample = process.env.VUE_APP_SUBCONVERTER_REMOTE_CONFIG
+const gayhubRelease = process.env.VUE_APP_BACKEND_RELEASE
+const defaultBackend = process.env.VUE_APP_SUBCONVERTER_DEFAULT_BACKEND + '/sub?'
+const shortUrlBackend = process.env.VUE_APP_MYURLS_DEFAULT_BACKEND + '/short'
+const configUploadBackend = process.env.VUE_APP_CONFIG_UPLOAD_BACKEND + '/config/upload'
+const tgBotLink = process.env.VUE_APP_BOT_LINK
 
 export default {
   data() {
@@ -579,6 +579,11 @@ export default {
     // document.title = "Subscription Converter";
     document.title = "在线订阅转换";
      this.isPC = this.$getOS().isPc;
+     
+    // 获取 url cache
+    if (process.env.VUE_APP_USE_STORAGE === 'true') {
+      this.form.sourceSubUrl = this.getLocalStorageItem('sourceSubUrl')
+    }
   },
   mounted() {
     this.form.clientType = "clash&new_name=true";
@@ -816,7 +821,40 @@ export default {
           this.backendVersion = res.data.replace(/backend\n$/gm, "");
           this.backendVersion = this.backendVersion.replace("subconverter", "");
         });
+    },
+    saveSubUrl() {
+      if (this.form.sourceSubUrl !== '') {
+        this.setLocalStorageItem('sourceSubUrl', this.form.sourceSubUrl)
+      }
+    },
+    getLocalStorageItem(itemKey) {
+      const now = +new Date()
+      let ls = localStorage.getItem(itemKey)
+
+      let itemValue = ''
+      if (ls !== null) {
+        let data = JSON.parse(ls)
+        if (data.expire > now) {
+          itemValue = data.value 
+        } else {
+          localStorage.removeItem(itemKey)
+        }
+      }
+
+      return itemValue 
+    },
+    setLocalStorageItem(itemKey, itemValue) {
+      const ttl = process.env.VUE_APP_CACHE_TTL 
+      const now = +new Date()
+
+      let data = {
+        setTime: now,
+        ttl: parseInt(ttl),
+        expire: now + ttl * 1000,
+        value: itemValue
+      }
+      localStorage.setItem(itemKey, JSON.stringify(data))
     }
-  }
+  },
 };
 </script>
